@@ -1,0 +1,18 @@
+crawl:
+  path:
+    baseUrl: https://www.leagueoflegends.com/
+    listPath: ko-kr/news/tags/patch-notes/
+  listPageValues:
+    listElementClass: .fWsPDo
+    listPathClass: .eIUhoC.cGAodJ
+    listPathElement: href
+    patchNoteTitleClass: .hvOSAW
+    patchNoteDateClass: .hXZvnQ
+    patchNoteDateElement: datetime
+  patchNoteValues:
+    selectorByKeyword: header:contains(챔피언)
+    processClass: .patch-change-block
+    processEndTag: header
+    champNameClass: .change-title
+    champSkillClass: .change-detail-title
+    champPatchDetailTag: li
