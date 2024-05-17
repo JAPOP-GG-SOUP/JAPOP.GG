@@ -10,6 +10,7 @@ import lombok.*;
 @AllArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
 // puuid 통해 소환사정보 얻음
+
 public class SummonerDto {
     private String accountId;
     private int profileIconId;
