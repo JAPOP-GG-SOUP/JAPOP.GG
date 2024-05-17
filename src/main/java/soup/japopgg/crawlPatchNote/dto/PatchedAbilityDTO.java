@@ -1,4 +1,4 @@
-package soup.japopgg.dto;
+package soup.japopgg.crawlPatchNote.dto;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

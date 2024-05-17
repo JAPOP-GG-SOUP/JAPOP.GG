@@ -3,10 +3,10 @@ package soup.japopgg;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import soup.japopgg.dto.PatchNoteDTO;
-import soup.japopgg.dto.PatchedAbilityDTO;
-import soup.japopgg.dto.PatchedChampionDTO;
-import soup.japopgg.service.CrawlingService;
+import soup.japopgg.crawlPatchNote.dto.PatchNoteDTO;
+import soup.japopgg.crawlPatchNote.dto.PatchedAbilityDTO;
+import soup.japopgg.crawlPatchNote.dto.PatchedChampionDTO;
+import soup.japopgg.crawlPatchNote.service.CrawlingService;
 
 import java.io.IOException;
 import java.util.List;

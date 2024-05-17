@@ -1,4 +1,4 @@
-package soup.japopgg.config;
+package soup.japopgg.crawlPatchNote.config;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;

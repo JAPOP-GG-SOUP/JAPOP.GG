@@ -1,4 +1,4 @@
-package soup.japopgg.service;
+package soup.japopgg.crawlPatchNote.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -7,10 +7,10 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.springframework.stereotype.Service;
-import soup.japopgg.config.CrawlConfig;
-import soup.japopgg.dto.PatchedChampionDTO;
-import soup.japopgg.dto.PatchNoteDTO;
-import soup.japopgg.dto.PatchedAbilityDTO;
+import soup.japopgg.crawlPatchNote.config.CrawlConfig;
+import soup.japopgg.crawlPatchNote.dto.PatchedChampionDTO;
+import soup.japopgg.crawlPatchNote.dto.PatchNoteDTO;
+import soup.japopgg.crawlPatchNote.dto.PatchedAbilityDTO;
 
 import java.io.IOException;
 import java.time.LocalDate;
