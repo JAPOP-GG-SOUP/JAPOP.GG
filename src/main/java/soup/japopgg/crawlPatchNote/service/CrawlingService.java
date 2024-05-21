@@ -49,7 +49,7 @@ public class CrawlingService {
         return null;
     }
 
-    public List<PatchedChampionDTO> crawlPatchNote(String patchNotePath, String patchNoteTitle) throws IOException {
+    public List<PatchedChampionDTO> crawlPatchNote(String patchNotePath, String patchNoteTitle, LocalDate patchDate) throws IOException {
         List<PatchedChampionDTO> patches = new ArrayList<>();
         String patchNoteUrl = crawlConfig.getPath().getBaseUrl() + patchNotePath;
 
@@ -67,7 +67,7 @@ public class CrawlingService {
             while (champPatchTag != null && !champPatchTag.tagName().equalsIgnoreCase(processEndTag)) {
                 Elements patchChangeBlocks = champPatchTag.select(processElementClass);
                 if (!patchChangeBlocks.isEmpty()) {
-                    String champion = champPatchTag.select(champNameClass).text();
+                    String championName = champPatchTag.select(champNameClass).text();
                     List<PatchedAbilityDTO> championPatchDetails = new ArrayList<>();
                     Elements changeTitles = champPatchTag.select(champSkillClass);
 
@@ -79,7 +79,19 @@ public class CrawlingService {
                             abilityPatchDetails.add(detailLine.text());
                         championPatchDetails.add(new PatchedAbilityDTO(ability, abilityPatchDetails));
                     }
-                    patches.add(new PatchedChampionDTO(champion, patchNoteTitle, championPatchDetails));
+
+                    PatchedChampionDTO existingChampionPatch = null;
+                    for (PatchedChampionDTO patch : patches) {
+                        if (patch.getChampion().equals(championName)) {
+                            existingChampionPatch = patch;
+                            break;
+                        }
+                    }
+
+                    if (existingChampionPatch != null)
+                        existingChampionPatch.getPatchInfo().addAll(championPatchDetails);
+                    else
+                        patches.add(new PatchedChampionDTO(championName, patchNoteTitle, patchDate, championPatchDetails));
                 }
                 champPatchTag = champPatchTag.nextElementSibling();
             }
