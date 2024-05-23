@@ -3,7 +3,7 @@ package soup.japopgg.searchSummoner.service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.stereotype.Service;
-import soup.japopgg.searchSummoner.RiotHttpClientService;
+import soup.japopgg.searchSummoner.RiotHttpClient;
 import soup.japopgg.searchSummoner.dto.AccountDto;
 import soup.japopgg.searchSummoner.dto.ResponseDto;
 import soup.japopgg.searchSummoner.dto.SummonerDto;
@@ -16,12 +16,12 @@ import java.util.Optional;
 @Service
 public class SummonerInformationService {
     private final SummonerRepository summonerRepository;
-    private final RiotHttpClientService riotHttpClientService;
+    private final RiotHttpClient riotHttpClient;
     private final ObjectMapper mapper;
 
-    public SummonerInformationService(SummonerRepository summonerRepository, RiotHttpClientService riotHttpClientService, ObjectMapper mapper) {
+    public SummonerInformationService(SummonerRepository summonerRepository, RiotHttpClient riotHttpClient, ObjectMapper mapper) {
         this.summonerRepository = summonerRepository;
-        this.riotHttpClientService = riotHttpClientService;
+        this.riotHttpClient = riotHttpClient;
         this.mapper = mapper;
     }
 
@@ -34,14 +34,14 @@ public class SummonerInformationService {
         SummonerInformationDto summonerInformationDto = null;
 
         // 소환사명, 태그로 puuid GET
-        responseDto = riotHttpClientService.getAccountsByNameAndTag(name, tag); //status = responseDto.getStatus();
+        responseDto = riotHttpClient.getAccountsByNameAndTag(name, tag); //status = responseDto.getStatus();
         if (responseDto.isOK()) { // true->응답 정상, false->응답 오류
 
             accountDto = mapper.readValue(responseDto.getResponseBody(), AccountDto.class);
         }
 
         // puuid로 소환사 정보 GET
-        responseDto = riotHttpClientService.getSummonersByPuuid(accountDto.getPuuid()); //status = responseDto.getStatus();
+        responseDto = riotHttpClient.getSummonersByPuuid(accountDto.getPuuid()); //status = responseDto.getStatus();
         if (responseDto.isOK()) {
             summonerDto = mapper.readValue(responseDto.getResponseBody(), SummonerDto.class);
         }

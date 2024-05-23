@@ -13,8 +13,8 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 
 @Component
-public class RiotHttpClientService {
-    private static final Logger logger = LoggerFactory.getLogger(RiotHttpClientService.class);
+public class RiotHttpClient {
+    private static final Logger logger = LoggerFactory.getLogger(RiotHttpClient.class);
 
     // 소환사명, 태그로 소환사 puuid GET
     // https://asia.api.riotgames.com/riot/account/v1/accounts/by-riot-id/%EC%8B%9C%EC%9E%91%EC%A0%90/kr1?api_key=RGAPI-ee9cf463-d7c3-44a5-a2f2-dca0de098fa3
