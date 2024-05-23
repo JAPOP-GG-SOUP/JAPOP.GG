@@ -1,9 +1,9 @@
-package soup.japopgg.searchSummoner.service;
+package soup.japopgg.searchSummoner;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import soup.japopgg.searchSummoner.RiotConstant;
+import org.springframework.stereotype.Component;
 import soup.japopgg.searchSummoner.dto.ResponseDto;
 import soup.japopgg.searchSummoner.exception.BusinessException;
 
@@ -12,6 +12,7 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 
+@Component
 public class RiotHttpClientService {
     private static final Logger logger = LoggerFactory.getLogger(RiotHttpClientService.class);
 
@@ -56,16 +57,15 @@ public class RiotHttpClientService {
 
             // httpResponse 내용물 : responseCode(200), headers, body(puuid, gameName, tagLine)
             // 정상 (= 200) 이 아니면 오류 발생
-            if(httpResponse.statusCode() != 200) {
-
+            if (httpResponse.statusCode() != 200) {
                 responseDto = mapper.readValue(httpResponse.body(), ResponseDto.class);
                 throw new BusinessException(responseDto.getStatus().getMessage());
+            } else {
+                // 반환 객체에 저장
+                responseDto = new ResponseDto(httpResponse.body());
             }
-
-            // 반환 객체에 저장
-            responseDto = new ResponseDto(httpResponse.body());
-
-        } catch (BusinessException ex) {
+        }
+        catch (BusinessException ex) {
 
             logger.error(ex.getMessage());
         } catch (Exception ex) { // ConnectException ... etc
