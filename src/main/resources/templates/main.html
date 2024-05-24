@@ -1,58 +1,54 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Main</title>
     <link rel="stylesheet" href="mainStyle.css">
 </head>
 <body>
-    <div class="search-container">
-        <form id="frm" name="frm" action="/main" method="get">
-            <input type="hidden" id="puuid" name="puuid" th:value="${account.puuid}" th:if="${account.puuid != null}">
-            <input type="hidden" id="id" name="id" th:value="${summoner.id}" th:if="${summoner.id != null}">
-            <input type="text" name="start" th:value="${paramMap.start}" maxlength="2" size="1">
-            <input type="text" name="count" th:value="${paramMap.count}" maxlength="2" size="1">
-            <input type="text" name="name" th:value="${paramMap.name}" placeholder="소환사명을 입력하세요." maxlength="20" size="20" onclick="this.select()">
-            <input type="text" name="tag" th:value="${paramMap.tag}" placeholder="태그명을 입력하세요." maxlength="20" size="20" onclick="this.select()">
-            <button type="submit">Go</button>
-        </form>
+<div class="search-container">
+    <form id="frm" name="frm" action="/main" method="get">
+        <input type="hidden" id="puuid" name="puuid" th:value="${summonerInformation.puuid}" th:if="${summonerInformation != null and summonerInformation.puuid != null}">
+        <input type="hidden" id="id" name="id" th:value="${summonerInformation.id}" th:if="${summonerInformation != null and summonerInformation.id != null}">
+        <input type="text" name="start" th:value="${paramMap.start}" maxlength="2" size="1">
+        <input type="text" name="count" th:value="${paramMap.count}" maxlength="2" size="1">
+        <input type="text" name="name" th:value="${paramMap.name}" placeholder="소환사명을 입력하세요." maxlength="20" size="20" onclick="this.select()">
+        <input type="text" name="tag" th:value="${paramMap.tag}" placeholder="태그명을 입력하세요." maxlength="20" size="20" onclick="this.select()">
+        <button type="submit">Go</button>
+    </form>
+</div>
+
+<th:block th:if="${paramMap.name.isEmpty()}">
+    <div class="alert alert-primary h6">
+        <strong>&lt; 소환사명 &gt;</strong>을 입력하면 롤 전적을 확인할 수 있습니다.
     </div>
+</th:block>
 
-    <th:block th:if="${paramMap.name.isEmpty()}">
-        <div class="alert alert-primary h6">
-            <strong>&lt; 소환사명 &gt;</strong>을 입력하면 롤 전적을 확인할 수 있습니다.
-        </div>
-    </th:block>
-
-    <th:block th:if="${not #strings.isEmpty(paramMap.name)}">
-        <div class="card shadow mh-100">
-            <div class="card-body">
-                <div class="row">
-                    <div class="col-5 profile-container">
-                        <img th:src="|https://ddragon.leagueoflegends.com/cdn/13.10.1/img/profileicon/${summoner.profileIconId}.png|" th:alt="${summoner.profileIconId}" style="width:10%">
-                        <span class="ribbon" th:text="${summoner.summonerLevel}">0</span>
-                    </div>
-                    <div class="col-7">
-                        <th:block th:if="${account.gameName == null}">
-                            <p class="fs-6 fw-semibold text-primary"><br/>소환사정보를 찾을 수 없습니다.</p>
-                        </th:block>
-                        <th:block th:if="${status != null}">
-                            <p class="text-secondary">&lt;<span th:text="${status.status_code}"></span>&gt; <span th:text="${status.message}"></span></p>
-                        </th:block>
-                        <th:block th:if="${account.gameName != null}">
-                            <p class="name" th:text="${account.gameName}"></p>
-                            <p class="small time">최근 업데이트 : <span class="time" th:text="${@dateUtil.getDateTimeFormat(summoner.revisionDate)}"></span></p>
-                            <!--  visually-hidden  -->
-                            <div class="small">
-                                <p class="visually-hidden">summonerId : <span class="text-secondary" th:text="${summoner.id}">-</span></p>
-                                <p class="visually-hidden">accountId : <span class="text-secondary" th:text="${summoner.accountId}">-</span></p>
-                                <p class="visually-hidden">puuid : <span class="text-secondary" th:text="${account.puuid}">-</span></p>
-                            </div>
-                        </th:block>
-                    </div>
+<th:block th:if="${not #strings.isEmpty(paramMap.name)}">
+    <div class="card shadow mh-100">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-5 profile-container">
+                    <img th:src="|https://ddragon.leagueoflegends.com/cdn/13.10.1/img/profileicon/${summonerInformation.profileIconId}.png|" th:alt="${summonerInformation.profileIconId}" th:if="${summonerInformation != null and summonerInformation.profileIconId != null}" style="width:10%">
+                    <span class="ribbon" th:text="${summonerInformation.summonerLevel}" th:if="${summonerInformation != null and summonerInformation.summonerLevel != null}">0</span>
+                </div>
+                <div class="col-7">
+                    <th:block th:if="${summonerInformation == null or summonerInformation.gameName == null}">
+                        <p class="fs-6 fw-semibold text-primary"><br/>소환사정보를 찾을 수 없습니다.</p>
+                    </th:block>
+                    <th:block th:if="${summonerInformation != null and summonerInformation.gameName != null}">
+                        <p class="name" th:text="${summonerInformation.gameName}"></p>
+                        <p class="small time">최근 업데이트 : <span class="time" th:text="${#dates.format(summonerInformation.revisionDate, 'yyyy-MM-dd HH:mm:ss')}"></span></p>
+                        <div class="small">
+                            <p class="visually-hidden">summonerId : <span class="text-secondary" th:text="${summonerInformation.id}">-</span></p>
+                            <p class="visually-hidden">accountId : <span class="text-secondary" th:text="${summonerInformation.accountId}">-</span></p>
+                            <p class="visually-hidden">puuid : <span class="text-secondary" th:text="${summonerInformation.puuid}">-</span></p>
+                        </div>
+                    </th:block>
                 </div>
             </div>
         </div>
-    </th:block>
+    </div>
+</th:block>
 </body>
 </html>
