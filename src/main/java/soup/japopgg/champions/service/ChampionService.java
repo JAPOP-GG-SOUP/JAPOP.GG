@@ -11,12 +11,12 @@ import soup.japopgg.champions.dto.ChampionDto;
 public class ChampionService {
     private final WebClient webClient;
 
-    public Mono<String> championInfo(String championName){
+    public Mono<ChampionDto> championInfo(String championName){
         return webClient.get()
                 .uri(uriBuilder -> uriBuilder.
                         path("{championName}.json")
                         .build(championName))
                 .retrieve()
-                .bodyToMono(String.class);
+                .bodyToMono(ChampionDto.class);
     }
 }

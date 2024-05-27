@@ -21,7 +21,7 @@ public class ChampionController {
 
     @RequestMapping("/champions/{championName}")
     @ResponseBody
-    public Mono<String> printChampionVerJson(@PathVariable("championName") String championName){
+    public Mono<ChampionDto> printChampionVerJson(@PathVariable("championName") String championName){
         return championService.championInfo(championName);
     }
 }

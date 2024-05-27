@@ -2,8 +2,9 @@ package soup.japopgg.champions.dto;
 
 import lombok.Data;
 
+import java.util.Map;
+
 @Data
 public class ChampionDto {
-    private String id;
-    private String name;
+    private Map<String, ChampionDataDto> data;
 }
