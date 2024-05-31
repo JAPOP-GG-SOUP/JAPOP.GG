@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import soup.japopgg.crawlPatchNote.dto.PatchNoteDTO;
 import soup.japopgg.crawlPatchNote.dto.PatchedAbilityDTO;
 import soup.japopgg.crawlPatchNote.dto.PatchedChampionDTO;
@@ -24,8 +25,9 @@ public class SearchPatchService {
     private final PatchNoteRepository patchNoteRepo;
     private final PatchedChampionRepository patchedChampionRepo;
 
+    @Transactional(readOnly = true)
     public List<PatchNoteDTO> getPatchNoteList(){
-        List<PatchNote> patchNotes = patchNoteRepo.findAll();
+        List<PatchNote> patchNotes = patchNoteRepo.findAllOrderByPatchDateDesc();
         List<PatchNoteDTO> result = patchNotes.stream()
                 .map(patchNote -> new PatchNoteDTO(
                         patchNote.getPatchNotePath(),
@@ -37,8 +39,19 @@ public class SearchPatchService {
         return result;
     }
 
+    @Transactional(readOnly = true)
     public List<PatchedChampionDTO> getPatchedChampionList(String patchNoteTitle){
-        List<PatchedChampion> patchedChampions = patchedChampionRepo.findAllByPatchNoteTitle(patchNoteTitle);
+        List<PatchedChampion> patchedChampions = patchedChampionRepo.findAllByPatchNoteTitleOrderByChampionDesc(patchNoteTitle);
+        return convertPatchedChampionEntityToDto(patchedChampions);
+    }
+
+    @Transactional(readOnly = true)
+    public List<PatchedChampionDTO> getChampionPatchHistory(String championName){
+        List<PatchedChampion> patchedChampions = patchedChampionRepo.findAllByChampionOrderByPatchDateDesc(championName);
+        return convertPatchedChampionEntityToDto(patchedChampions);
+    }
+
+    private List<PatchedChampionDTO> convertPatchedChampionEntityToDto(List<PatchedChampion> patchedChampions){
         List<PatchedChampionDTO> result = patchedChampions.stream()
                 .map(champion -> new PatchedChampionDTO(
                         champion.getChampion(),
