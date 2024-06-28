@@ -7,5 +7,6 @@ import java.util.List;
 
 public interface PatchedChampionRepository extends JpaRepository<PatchedChampion,Long> {
     void deleteByPatchNoteTitleAndChampion(String patchNoteTitle,String champion);
-    List<PatchedChampion> findAllByPatchNoteTitle(String patchNoteTitle);
+    List<PatchedChampion> findAllByPatchNoteTitleOrderByChampionDesc(String patchNoteTitle);
+    List<PatchedChampion> findAllByChampionOrderByPatchDateDesc(String championName);
 }

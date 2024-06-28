@@ -25,7 +25,7 @@ public class CrawlingService {
 
     private final CrawlConfig crawlConfig;
 
-    public PatchNoteDTO crawlLatestPatchNoteTitle()throws IOException {
+    public PatchNoteDTO crawlLatestPatchNoteTitle() throws IOException {
         String patchNoteListUrl = crawlConfig.getPath().getBaseUrl() + crawlConfig.getPath().getListPath();
 
         Document document = Jsoup.connect(patchNoteListUrl).get();

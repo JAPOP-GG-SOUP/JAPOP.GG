@@ -7,14 +7,21 @@ import soup.japopgg.crawlPatchNote.dto.PatchNoteDTO;
 import soup.japopgg.crawlPatchNote.dto.PatchedAbilityDTO;
 import soup.japopgg.crawlPatchNote.dto.PatchedChampionDTO;
 import soup.japopgg.crawlPatchNote.service.CrawlingService;
+import soup.japopgg.crawlPatchNote.service.PatchDataService;
+import soup.japopgg.crawlPatchNote.service.SearchPatchService;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.List;
 
 @SpringBootTest
 class JapopGgApplicationTests {
 	@Autowired
 	CrawlingService crawlingService;
+	@Autowired
+	PatchDataService patchDataService;
+	@Autowired
+	SearchPatchService searchPatchService;
 
 	@Test
 	void parsePatchNoteListTest() throws IOException {
@@ -28,7 +35,9 @@ class JapopGgApplicationTests {
 	void parsePatchNoteTest() throws IOException{
 		String testPath = "ko-kr/news/game-updates/patch-14-9-notes/";
 		String testTitle = "14.10 패치노트";
-		List<PatchedChampionDTO> testList = crawlingService.crawlPatchNote(testPath,testTitle);
+		LocalDate testDate = LocalDate.now();
+
+		List<PatchedChampionDTO> testList = crawlingService.crawlPatchNote(testPath,testTitle,testDate);
 		for(PatchedChampionDTO champ: testList){
 			System.out.println(champ.getPatchNoteTitle());
 			System.out.println(champ.getChampion());
@@ -38,5 +47,40 @@ class JapopGgApplicationTests {
 					System.out.println("\t"+detail);
 			}
 		}
+	}
+
+	@Test
+	void savePatchNoteTest() throws IOException{
+		String testPath = "ko-kr/news/game-updates/patch-14-9-notes/";
+		String testTitle = "14.10 패치노트";
+		LocalDate testDate = LocalDate.now();
+
+		patchDataService.savePatchNoteData(new PatchNoteDTO(testPath,testTitle,testDate));
+		List<PatchNoteDTO> testList = searchPatchService.getPatchNoteList();
+		for(PatchNoteDTO result:testList)
+			System.out.println(result.getPatchNoteTitle());
+	}
+
+	@Test
+	void deletePatchNoteTest() throws IOException{
+		String testTitle = "14.10 패치노트";
+		patchDataService.deletePatchNoteData(testTitle);
+	}
+
+	@Test
+	void saveChampionPatchTest() throws IOException{
+		String testPath = "ko-kr/news/game-updates/patch-14-9-notes/";
+		String testTitle = "14.10 패치노트";
+		LocalDate testDate = LocalDate.now();
+
+		List<PatchedChampionDTO> testList = crawlingService.crawlPatchNote(testPath,testTitle,testDate);
+		for(PatchedChampionDTO champ: testList)
+			patchDataService.savePatchedChampionData(champ);
+	}
+
+	@Test
+	void deleteChampionPatchTest() throws IOException{
+		String testTitle = "14.10 패치노트";
+		patchDataService.deletePatchedChampionData(testTitle,"아크샨");
 	}
 }
