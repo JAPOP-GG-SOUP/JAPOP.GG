@@ -7,5 +7,6 @@ import java.util.List;
 
 public interface PatchNoteRepository extends JpaRepository<PatchNote, Long> {
     void deleteByPatchNoteTitle(String patchNoteTitle);
-    List<PatchNote> findAllOrderByPatchDateDesc();
+    List<PatchNote> findAllByOrderByPatchDateDesc();
+    PatchNote findFirstByOrderByPatchDateDesc();
 }
